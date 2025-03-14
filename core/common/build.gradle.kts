@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.alexisdev.domain"
+    namespace = "com.alexisdev.common"
     compileSdk = 35
 
     defaultConfig {
@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -43,4 +43,6 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
     implementation(libs.koin.core)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.fragment)
 }

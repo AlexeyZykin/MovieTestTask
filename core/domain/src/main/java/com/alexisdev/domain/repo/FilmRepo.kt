@@ -8,5 +8,5 @@ interface FilmRepo {
     fun getAllFilms(): Flow<List<Film>>
     fun getFilmDetails(filmId: Int): Flow<Film>
     fun getAllGenres(): Flow<List<Genre>>
-    fun getFilmsByGenre(genre: Genre)
+    fun getFilmsByGenre(genre: Genre): Flow<List<Film>>
 }

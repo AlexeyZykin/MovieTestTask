@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.alexisdev.domain"
+    namespace = "com.alexisdev.network"
     compileSdk = 35
 
     defaultConfig {
@@ -40,6 +40,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.okhttp)
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
     implementation(libs.koin.core)

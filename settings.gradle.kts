@@ -23,3 +23,5 @@ rootProject.name = "MovieTestTask"
 include(":app")
 include(":core:domain")
 
+include(":core:network")
+include(":core:common")
