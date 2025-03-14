@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "MovieTestTask"
 include(":app")
- 
+include(":core:domain")
+
