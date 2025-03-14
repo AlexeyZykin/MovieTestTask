@@ -25,3 +25,4 @@ include(":core:domain")
 
 include(":core:network")
 include(":core:common")
+include(":core:data")
