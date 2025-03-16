@@ -83,7 +83,10 @@ class FilmCatalogFragment : Fragment() {
         filmAdapter = FilmAdapter(
             object : FilmAdapter.ClickListener {
                 override fun onClick(filmId: Int) {
-                    //todo
+                    val action = FilmCatalogFragmentDirections.actionFilmCatalogFragmentToFilmDetailsNavGraph(
+                        filmId
+                    )
+                    viewModel.onEvent(FilmCatalogEvent.OnFilmClick(action))
                 }
             }
         )

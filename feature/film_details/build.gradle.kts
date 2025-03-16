@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.navigation.safeargs)
 }
 
 android {
-    namespace = "com.alexisdev.film_catalog"
+    namespace = "com.alexisdev.film_details"
     compileSdk = 35
 
     defaultConfig {
@@ -38,9 +37,9 @@ android {
 
 dependencies {
     implementation(project(":core:domain"))
-    implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
-    implementation(project(":feature:film_details"))
+    implementation(project(":core:common"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -55,4 +54,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
 }

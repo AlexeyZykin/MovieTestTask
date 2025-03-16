@@ -3,7 +3,10 @@ package com.alexisdev.film_catalog
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
 import com.alexisdev.common.Response
+import com.alexisdev.common.navigation.NavEffect
+import com.alexisdev.common.navigation.NavigationManager
 import com.alexisdev.domain.usecase.api.GetAllFilmsUseCase
 import com.alexisdev.domain.usecase.api.GetAllGenresUseCase
 import com.alexisdev.domain.usecase.api.GetFilmDetailsUseCase
@@ -24,7 +27,8 @@ class FilmCatalogViewModel(
     private val getAllFilmsUseCase: GetAllFilmsUseCase,
     private val getAllGenresUseCase: GetAllGenresUseCase,
     private val getFilmsByGenreUseCase: GetFilmsByGenreUseCase,
-    private val getSelectedGenreUseCase: GetSelectedGenreUseCase
+    private val getSelectedGenreUseCase: GetSelectedGenreUseCase,
+    private val navigationManager: NavigationManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<FilmCatalogState>(FilmCatalogState.Loading)
@@ -78,6 +82,10 @@ class FilmCatalogViewModel(
             is FilmCatalogEvent.OnRetry -> {
                 handleOnRetry()
             }
+
+            is FilmCatalogEvent.OnFilmClick -> {
+                handleOnFilmClick(event.navDirections)
+            }
         }
     }
 
@@ -104,12 +112,18 @@ class FilmCatalogViewModel(
         getAllFilmCatalogData()
     }
 
+    private fun handleOnFilmClick(navDirections: NavDirections) {
+        navigationManager.navigate(NavEffect.NavigateTo(navDirections))
+    }
+
 }
 
 
 sealed interface FilmCatalogEvent {
 
     data class OnSelectGenre(val genre: GenreUi) : FilmCatalogEvent
+
+    data class OnFilmClick(val navDirections: NavDirections) : FilmCatalogEvent
 
     data object OnRetry : FilmCatalogEvent
 }
