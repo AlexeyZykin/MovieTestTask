@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface GetFilmsByGenreUseCase {
 
-    fun execute(genre: Genre): Flow<List<Film>>
+    fun execute(genre: Genre?): Flow<List<Film>>
 }

@@ -5,5 +5,5 @@ import com.alexisdev.domain.repo.FilmRepo
 import org.koin.dsl.module
 
 val dataModule = module {
-    single <FilmRepo> { FilmRepoImpl(get()) }
+    single<FilmRepo> { FilmRepoImpl(get()) }
 }

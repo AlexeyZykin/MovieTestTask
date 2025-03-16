@@ -2,6 +2,8 @@ package com.alexisdev.network.di
 
 import com.alexisdev.network.api.FILM_API_BASE_URL
 import com.alexisdev.network.api.FilmApiService
+import com.alexisdev.network.source.FilmNetworkDataSource
+import com.alexisdev.network.source.FilmNetworkDataSourceImpl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -14,7 +16,7 @@ val networkModule = module {
     single { provideFilmApiService(get()) }
     single { provideHttpInterceptor() }
     single { provideOkHttpClient(get()) }
-
+    single<FilmNetworkDataSource> { FilmNetworkDataSourceImpl(get()) }
 }
 
 

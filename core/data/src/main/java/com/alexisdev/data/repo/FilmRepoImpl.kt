@@ -1,5 +1,6 @@
 package com.alexisdev.data.repo
 
+import android.util.Log
 import com.alexisdev.common.Response
 import com.alexisdev.data.mapper.toFilm
 import com.alexisdev.domain.model.Film
@@ -18,7 +19,8 @@ class FilmRepoImpl(private val filmNetworkDataSource: FilmNetworkDataSource) : F
     private val _cachedFilms = MutableStateFlow<List<Film>>(emptyList());
     private val cachedFilms: StateFlow<List<Film>> get() = _cachedFilms
 
-    private val lastSelectedGenre = MutableStateFlow<Genre?>(null)
+    private val _lastSelectedGenre = MutableStateFlow<Genre?>(null)
+    private val lastSelectedGenre: StateFlow<Genre?> get() = _lastSelectedGenre
 
 
     override fun getAllFilms(): Flow<Response<List<Film>>> {
@@ -54,20 +56,24 @@ class FilmRepoImpl(private val filmNetworkDataSource: FilmNetworkDataSource) : F
     }
 
     override fun getFilmsByGenre(genre: Genre?): Flow<List<Film>> {
-        lastSelectedGenre.tryEmit(
-            if (genre != lastSelectedGenre.value) {
+        _lastSelectedGenre.tryEmit(
+            if (genre != _lastSelectedGenre.value) {
                 genre
             } else {
                 null
             }
         )
 
-        return if (lastSelectedGenre.value == null) {
+        return if (_lastSelectedGenre.value == null) {
             cachedFilms
         } else {
             cachedFilms.flatMapLatest { films ->
                 flowOf(films.filter { it.genres.contains(genre) })
             }
         }
+    }
+
+    override fun getSelectedGenre(): Flow<Genre?> {
+        return lastSelectedGenre
     }
 }

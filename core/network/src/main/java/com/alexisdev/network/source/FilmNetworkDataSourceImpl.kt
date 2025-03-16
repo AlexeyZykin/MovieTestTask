@@ -27,7 +27,7 @@ internal class FilmNetworkDataSourceImpl(private val filmApiService: FilmApiServ
 
                 emit(Response.Success(data = films))
             } catch (e: Exception) {
-                emit(Response.Error(message = "Отсутствует интернет соединение!"))
+                emit(Response.Error(message = "Ошибка подключения сети"))
             }
         }
     }

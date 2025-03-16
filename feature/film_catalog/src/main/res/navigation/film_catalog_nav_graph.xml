@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/film_catalog_nav_graph"
+    app:startDestination="@id/filmCatalogFragment">
+
+
+    <fragment
+        android:id="@+id/filmCatalogFragment"
+        android:name="com.alexisdev.film_catalog.FilmCatalogFragment"
+        android:label="@string/film_catalog_toolbar_title"
+        tools:layout="@layout/fragment_film_catalog" />
+</navigation>
