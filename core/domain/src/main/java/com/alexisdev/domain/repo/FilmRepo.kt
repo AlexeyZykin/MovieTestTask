@@ -9,6 +9,6 @@ interface FilmRepo {
     fun getAllFilms(): Flow<Response<List<Film>>>
     fun getFilmDetails(filmId: Int): Flow<Film>
     fun getAllGenres(): Flow<List<Genre>>
-    fun getFilmsByGenre(genre: Genre?): Flow<List<Film>>
+    fun getFilmsByGenre(genre: Genre): Flow<List<Film>>
     fun getSelectedGenre(): Flow<Genre?>
 }

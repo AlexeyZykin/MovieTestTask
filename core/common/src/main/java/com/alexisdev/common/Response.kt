@@ -11,5 +11,4 @@ sealed class Response<out T> {
 
 
 fun <T> Flow<T>.asResponse(): Flow<Response<T>> = map<T, Response<T>> { Response.Success(it) }
-    // .onStart { emit(Response.Loading) }
     .catch { emit(Response.Error(it.message ?: "Error")) }

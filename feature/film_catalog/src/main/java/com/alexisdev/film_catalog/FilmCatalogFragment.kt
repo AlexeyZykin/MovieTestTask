@@ -1,20 +1,16 @@
 package com.alexisdev.film_catalog
 
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alexisdev.film_catalog.adapter.FilmAdapter
 import com.alexisdev.film_catalog.adapter.GenreAdapter
 import com.alexisdev.film_catalog.databinding.FragmentFilmCatalogBinding
@@ -28,10 +24,29 @@ import com.alexisdev.designsystem.R as designsystem
 
 class FilmCatalogFragment : Fragment() {
     private lateinit var binding: FragmentFilmCatalogBinding
-    private lateinit var filmAdapter: FilmAdapter
-    private lateinit var genreAdapter: GenreAdapter
     private var currentSnackbar: Snackbar? = null
     private val viewModel by viewModel<FilmCatalogViewModel>()
+
+    private val genreAdapter by lazy {
+        GenreAdapter(
+            object : GenreAdapter.ClickListener {
+                override fun onClick(genre: GenreUi) {
+                    viewModel.onEvent(FilmCatalogEvent.OnSelectGenre(genre))
+                }
+            }
+        )
+    }
+
+    private val filmAdapter by lazy {
+        FilmAdapter(
+            object : FilmAdapter.ClickListener {
+                override fun onClick(filmId: Int) {
+                    viewModel.onEvent(FilmCatalogEvent.OnFilmClick(filmId))
+                }
+            }
+        )
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +59,10 @@ class FilmCatalogFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        observeFilmCatalogState()
+    }
+
+    private fun observeFilmCatalogState() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
@@ -72,30 +91,18 @@ class FilmCatalogFragment : Fragment() {
         }
     }
 
+
     private fun setupRecyclerView() {
-        genreAdapter = GenreAdapter(
-            object : GenreAdapter.ClickListener {
-                override fun onClick(genre: GenreUi) {
-                    viewModel.onEvent(FilmCatalogEvent.OnSelectGenre(genre))
-                }
-            }
-        )
-        filmAdapter = FilmAdapter(
-            object : FilmAdapter.ClickListener {
-                override fun onClick(filmId: Int) {
-                    val action = FilmCatalogFragmentDirections.actionFilmCatalogFragmentToFilmDetailsNavGraph(
-                        filmId
-                    )
-                    viewModel.onEvent(FilmCatalogEvent.OnFilmClick(action))
-                }
-            }
-        )
-        binding.rvGenres.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvGenres.adapter = genreAdapter
-        binding.rvFilms.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.rvFilms.adapter = filmAdapter
-        binding.rvGenres.isNestedScrollingEnabled = false
-        binding.rvFilms.isNestedScrollingEnabled = false
+        binding.rvGenres.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = genreAdapter
+            isNestedScrollingEnabled = false
+        }
+        binding.rvFilms.apply {
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = filmAdapter
+            isNestedScrollingEnabled = false
+        }
     }
 
     private fun showProgressBar(isShow: Boolean) {
@@ -131,5 +138,4 @@ class FilmCatalogFragment : Fragment() {
         filmAdapter.map(films)
         genreAdapter.updateSelectedGenre(selectedGenre)
     }
-
 }

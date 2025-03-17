@@ -2,6 +2,7 @@ package com.alexisdev.movietesttask
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -9,13 +10,17 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.alexisdev.common.getKoinInstance
+import com.alexisdev.common.navigation.NavDirection
 import com.alexisdev.common.navigation.NavEffect
 import com.alexisdev.common.navigation.NavigationManager
+import com.alexisdev.film_catalog.FilmCatalogFragmentDirections
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -43,15 +48,24 @@ class MainActivity : AppCompatActivity() {
             navManager.navEffectFlow.collect { navEffect ->
                 when (navEffect) {
                     is NavEffect.NavigateTo -> {
-                        navController.navigate(
-                            directions = navEffect.navDirections
-                        )
+                        handleNavDirection(navEffect.direction, navController)
                     }
 
                     is NavEffect.NavigateUp -> {
                         navController.navigateUp()
                     }
                 }
+            }
+        }
+    }
+
+    private fun handleNavDirection(navDirection: NavDirection, navController: NavController) {
+        when (navDirection) {
+            is NavDirection.FilmCatalogToFilmDetails -> {
+                val action = FilmCatalogFragmentDirections.actionFilmCatalogFragmentToFilmDetailsNavGraph(
+                    navDirection.filmId
+                )
+                navController.navigate(action)
             }
         }
     }

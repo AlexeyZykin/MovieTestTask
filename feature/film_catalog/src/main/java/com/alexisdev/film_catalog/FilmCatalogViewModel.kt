@@ -1,10 +1,12 @@
 package com.alexisdev.film_catalog
 
+import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.alexisdev.common.Response
+import com.alexisdev.common.navigation.NavDirection
 import com.alexisdev.common.navigation.NavEffect
 import com.alexisdev.common.navigation.NavigationManager
 import com.alexisdev.domain.usecase.api.GetAllFilmsUseCase
@@ -23,7 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
-class FilmCatalogViewModel(
+internal class FilmCatalogViewModel(
     private val getAllFilmsUseCase: GetAllFilmsUseCase,
     private val getAllGenresUseCase: GetAllGenresUseCase,
     private val getFilmsByGenreUseCase: GetFilmsByGenreUseCase,
@@ -33,7 +35,6 @@ class FilmCatalogViewModel(
 
     private val _uiState = MutableStateFlow<FilmCatalogState>(FilmCatalogState.Loading)
     val uiState: StateFlow<FilmCatalogState> get() = _uiState
-
 
     init {
         getAllFilmCatalogData()
@@ -84,7 +85,7 @@ class FilmCatalogViewModel(
             }
 
             is FilmCatalogEvent.OnFilmClick -> {
-                handleOnFilmClick(event.navDirections)
+                handleOnFilmClick(event.filmId)
             }
         }
     }
@@ -97,6 +98,7 @@ class FilmCatalogViewModel(
                         is FilmCatalogState.Content -> {
                             filmCatalogState.copy(films = films.map { it.toFilmUi() })
                         }
+
                         else -> filmCatalogState
                     }
                 }
@@ -112,10 +114,11 @@ class FilmCatalogViewModel(
         getAllFilmCatalogData()
     }
 
-    private fun handleOnFilmClick(navDirections: NavDirections) {
-        navigationManager.navigate(NavEffect.NavigateTo(navDirections))
+    private fun handleOnFilmClick(filmId: Int) {
+        navigationManager.navigate(NavEffect.NavigateTo(
+            NavDirection.FilmCatalogToFilmDetails(filmId)
+        ))
     }
-
 }
 
 
@@ -123,7 +126,8 @@ sealed interface FilmCatalogEvent {
 
     data class OnSelectGenre(val genre: GenreUi) : FilmCatalogEvent
 
-    data class OnFilmClick(val navDirections: NavDirections) : FilmCatalogEvent
+    data class OnFilmClick(val filmId: Int) :
+        FilmCatalogEvent
 
     data object OnRetry : FilmCatalogEvent
 }

@@ -11,7 +11,7 @@ internal val koinModules = listOf(
     networkModule,
     dataModule,
     domainModule,
-    filmCatalogFeatureModule,
     navigationModule,
+    filmCatalogFeatureModule,
     filmDetailsFeatureModule
 )

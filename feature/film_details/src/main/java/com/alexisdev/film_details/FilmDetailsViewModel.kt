@@ -3,7 +3,8 @@ package com.alexisdev.film_details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alexisdev.common.Response
+import com.alexisdev.common.navigation.NavEffect
+import com.alexisdev.common.navigation.NavigationManager
 import com.alexisdev.domain.usecase.api.GetFilmDetailsUseCase
 import com.alexisdev.film_details.mapper.toFilmUi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +37,6 @@ internal class FilmDetailsViewModel(
                     .launchIn(viewModelScope)
             }
     }
-
 
     companion object {
         private const val ARG_FILM_ID = "filmId"

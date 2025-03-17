@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@+id/film_catalog_nav_graph">
+    app:startDestination="@id/filmCatalogFragment">
 
-    <include app:graph="@navigation/film_catalog_nav_graph" />
+    <fragment
+        android:id="@+id/filmCatalogFragment"
+        android:name="com.alexisdev.film_catalog.FilmCatalogFragment"
+        android:label="@string/film_catalog_films_header"
+        tools:layout="@layout/fragment_film_catalog">
+
+        <action
+            android:id="@+id/action_filmCatalogFragment_to_film_details_nav_graph"
+            app:destination="@id/filmDetailsFragment">
+        </action>
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/filmDetailsFragment"
+        android:name="com.alexisdev.film_details.FilmDetailsFragment"
+        android:label=""
+        tools:layout="@layout/fragment_film_details">
+
+        <argument
+            android:name="filmId"
+            app:argType="integer" />
+
+    </fragment>
 
 </navigation>
+

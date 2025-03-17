@@ -31,6 +31,10 @@ class FilmDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeFilmDetailsState()
+    }
+
+    private fun observeFilmDetailsState() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
@@ -47,7 +51,6 @@ class FilmDetailsFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun showProgress(isShow: Boolean) {
