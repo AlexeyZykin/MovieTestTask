@@ -2,6 +2,7 @@ package com.alexisdev.film_catalog
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -19,6 +20,7 @@ import com.alexisdev.film_catalog.model.GenreUi
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.abs
 import com.alexisdev.designsystem.R as designsystem
 
 
@@ -114,15 +116,20 @@ class FilmCatalogFragment : Fragment() {
         val snackbar = Snackbar.make(
             view, msg, Snackbar.LENGTH_INDEFINITE
         )
-
         snackbar.setBackgroundTint(requireContext().getColor(designsystem.color.dark_gray))
         snackbar.setActionTextColor(requireContext().getColor(designsystem.color.yellow))
         snackbar.setAction(getString(R.string.film_catalog_action_title)) {
             viewModel.onEvent(FilmCatalogEvent.OnRetry)
         }
-
         (snackbar.view.layoutParams as CoordinatorLayout.LayoutParams).behavior = null
-
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(snackbar: Snackbar, event: Int) {
+                super.onDismissed(snackbar, event)
+                if (event == DISMISS_EVENT_SWIPE) {
+                    showErrorSnackbar(view, msg)
+                }
+            }
+        })
         currentSnackbar = snackbar
         snackbar.show()
     }
